@@ -22,13 +22,10 @@ export default function Home() {
 
   const handleCastButton = useCallback(() => {
     
-    // UYARI: alert() satırı kaldırıldı!
-    
     // Farcaster Compose Intent URL'si
-    // NOT: fids.xyz yerine direkt warpcast.com/~/compose da kullanılabilir.
     const castUrl = "https://farcaster.xyz/~/compose?text=Hello%20World"; 
     
-    // Asıl Farcaster komutu: Warpcast penceresini açar.
+    // Warpcast penceresini açar.
     sdk.actions.openUrl(castUrl);
   }, []);
 
