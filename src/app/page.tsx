@@ -46,7 +46,7 @@ export default function Home() {
             onClick={handleCastButton}
             className="w-full py-4 px-6 bg-purple-600 hover:bg-purple-500 active:bg-purple-700 text-white font-bold rounded-xl transition-all transform active:scale-95 text-lg"
           >
-            📢 &quot;Hello World&quot; Cast At {/* Bu satırdaki metin elle yeniden yazıldı */}
+            {/* Hata veren metin kaldırıldı. */}
           </button>
         </div>
 
