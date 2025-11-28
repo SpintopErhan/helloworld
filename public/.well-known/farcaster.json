@@ -1,0 +1,18 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjE1MTkzLCJ0eXBlIjoiY3VzdG9keSIsImtleSI6IjB4MjE4MjM3NjYzODM5ZTYyNjg1NTU2QzQxODU2ODhiMjVCOTM4YjE4RCJ9",
+    "payload": "eyJkb21haW4iOiJzZW5pbi12ZXJjZWwtYWRyZXNpbi52ZXJjZWwuYXBwIn0",
+    "signature": "MHg..."
+  },
+  "frame": {
+    "version": "1",
+    "name": "Hello World App",
+    "iconUrl": "https://senin-siten.com/icon.png",
+    "homeUrl": "https://senin-siten.com",
+    "imageUrl": "https://senin-siten.com/image.png",
+    "buttonTitle": "Launch App",
+    "splashImageUrl": "https://senin-siten.com/splash.png",
+    "splashBackgroundColor": "#eeccff",
+    "webhookUrl": "https://senin-siten.com/api/webhook"
+  }
+}
