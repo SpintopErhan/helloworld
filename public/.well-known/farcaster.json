@@ -2,9 +2,9 @@
   "frame": {
     "name": "HelloWorld",
     "version": "1",
-    "iconUrl": "https://helloworld-git-main-erhans-projects-9be529ed.vercel.app/icon.png",
+    "iconUrl": "https://helloworld-six-omega.vercel.app/icon.png",
     "homeUrl": "https://helloworld-six-omega.vercel.app/",
-    "splashImageUrl": "https://helloworld-git-main-erhans-projects-9be529ed.vercel.app/icon.png",
+    "splashImageUrl": "https://helloworld-six-omega.vercel.app/icon.png",
     "splashBackgroundColor": "#3F48CC",
     "subtitle": "Hello World",
     "description": "Say Hello to World",
