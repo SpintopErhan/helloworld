@@ -20,17 +20,17 @@ export default function Home() {
     }
   }, [isSDKLoaded]);
 
- // src/app/page.tsx içindeki handleCastButton fonksiyonu
-const handleCastButton = useCallback(() => {
+  const handleCastButton = useCallback(() => {
     
-    // Geçici olarak bir uyarı ekle (Kaldırmayı unutma!)
-    alert("Butona Basıldı! Şimdi Warpcast'te açılmalı."); 
+    // UYARI: alert() satırı kaldırıldı!
     
-    const castUrl = "https://farcaster.xyz/~/compose?text=Hello%20World";
+    // Farcaster Compose Intent URL'si
+    // NOT: fids.xyz yerine direkt warpcast.com/~/compose da kullanılabilir.
+    const castUrl = "https://farcaster.xyz/~/compose?text=Hello%20World"; 
     
-    // Asıl Farcaster komutu
+    // Asıl Farcaster komutu: Warpcast penceresini açar.
     sdk.actions.openUrl(castUrl);
-}, []);
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-slate-900 text-white p-4">
@@ -49,7 +49,7 @@ const handleCastButton = useCallback(() => {
             onClick={handleCastButton}
             className="w-full py-4 px-6 bg-purple-600 hover:bg-purple-500 active:bg-purple-700 text-white font-bold rounded-xl transition-all transform active:scale-95 text-lg"
           >
-            📢 "Hello World" Cast At
+            📢 &quot;Hello World&quot; Cast At 
           </button>
         </div>
 
