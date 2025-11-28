@@ -1,18 +1,18 @@
 {
-  "accountAssociation": {
-    "header": "eyJmaWQiOjE1MTkzLCJ0eXBlIjoiY3VzdG9keSIsImtleSI6IjB4MjE4MjM3NjYzODM5ZTYyNjg1NTU2QzQxODU2ODhiMjVCOTM4YjE4RCJ9",
-    "payload": "eyJkb21haW4iOiJzZW5pbi12ZXJjZWwtYWRyZXNpbi52ZXJjZWwuYXBwIn0",
-    "signature": "MHg..."
-  },
   "frame": {
+    "name": "HelloWorld",
     "version": "1",
-    "name": "Hello World App",
-    "iconUrl": "https://senin-siten.com/icon.png",
-    "homeUrl": "https://senin-siten.com",
-    "imageUrl": "https://senin-siten.com/image.png",
-    "buttonTitle": "Launch App",
-    "splashImageUrl": "https://senin-siten.com/splash.png",
-    "splashBackgroundColor": "#eeccff",
-    "webhookUrl": "https://senin-siten.com/api/webhook"
+    "iconUrl": "https://helloworld-git-main-erhans-projects-9be529ed.vercel.app/icon.png",
+    "homeUrl": "https://helloworld-six-omega.vercel.app/",
+    "splashImageUrl": "https://helloworld-git-main-erhans-projects-9be529ed.vercel.app/icon.png",
+    "splashBackgroundColor": "#3F48CC",
+    "subtitle": "Hello World",
+    "description": "Say Hello to World",
+    "primaryCategory": "social"
+  },
+  "accountAssociation": {
+    "header": "eyJmaWQiOjQ4MjAxMSwidHlwZSI6ImF1dGgiLCJrZXkiOiIweGExREFERWIwZDFmYWUyQTExQmNjMmQ3NWYzY0ZhYjA4ODQyYUVCYTUifQ",
+    "payload": "eyJkb21haW4iOiIifQ",
+    "signature": "eyk6XnzRjphyfODmbveLFh7nyW7IhVo8jLNzu5y/BEdZc7PAtOd5AJ4XCJXRUvxy04tI05PVZJdHOHEYy5B4chs="
   }
 }
