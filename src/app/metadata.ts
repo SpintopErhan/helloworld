@@ -1,6 +1,7 @@
+// app/metadata.ts (veya layout.tsx içine koy)
 import type { Metadata } from 'next';
 
-const appUrl = "https://helloworld-six-omega.vercel.app";
+const baseUrl = "https://helloworld-six-omega.vercel.app";
 
 export const metadata: Metadata = {
   title: "Hello World Miniapp",
@@ -8,32 +9,29 @@ export const metadata: Metadata = {
 
   openGraph: {
     title: "Hello World Miniapp",
-    description: "Tıkla ve Miniapp'i Farcaster içinde aç!",
-    images: [`${appUrl}/frame_image.png`],
-    url: appUrl,
+    description: "Tıkla ve direkt Miniapp içinde aç!",
+    images: [`${baseUrl}/frame_image.png`],
+    url: baseUrl,
   },
 
-  // YENİ ve ZORUNLU: Miniapp embed için
   other: {
-    // Miniapp olduğunu bildir
+    // BURASI ASIL ÖNEMLİ – EKSİKSİZ VE DOĞRU OLMALI!
     "fc:miniapp": JSON.stringify({
       version: "1",
-      imageUrl: `${appUrl}/frame_image.png`,        // Embed'de görünecek büyük resim
+      imageUrl: `${baseUrl}/frame_image.png`,        // 1200x630 veya 1200x800 önerilir
       button: {
-        title: "Miniapp'i Aç 🚀",                    // Cast altındaki buton yazısı
+        title: "Miniapp'i Aç",                       // Cast altındaki buton yazısı
         action: {
-          type: "launch_miniapp",                    // Bu çok önemli! Client içinde açar
-          name: "Hello World Miniapp",
-          // url: otomatik current page olur, yazmasan da olur
-          splashImageUrl: `${appUrl}/frame_image.png`, // Açılırken splash ekranı (isteğe bağlı)
-          splashBackgroundColor: "#1e1b4b"            // Mor tonu örnek (isteğe bağlı)
+          type: "launch_miniapp",                    // BU OLMADAN TARAYICIYA GİDER!
+          name: "Hello World Miniapp"
+          // url: otomatik current page, yazmana gerek yok
         }
       }
     }),
 
-    // Geriye uyumluluk için eski frame tag'ini de bırak (zarar vermez)
+    // Geriye uyumluluk (eski client’lar için)
     "fc:frame": "vNext",
-    "fc:frame:image": `${appUrl}/frame_image.png`,
-    // Buton eklemiyoruz çünkü Miniapp butonu fc:miniapp üstünden geliyor
+    "fc:frame:image": `${baseUrl}/frame_image.png`,
+    "fc:frame:image:aspect_ratio": "1.91:1",        // veya "1:1" (çok önemli!)
   },
 };
