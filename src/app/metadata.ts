@@ -17,15 +17,16 @@ export const metadata: Metadata = {
   },
 
   // 3. Farcaster Frame Metadata Etiketleri (Embedding için KRİTİK)
- other: {
-    // ...
-    'fc:frame:button:1': 'Uygulamayı Başlat (Launch App)', 
-    'fc:frame:button:1:action': 'post_redirect', // DEĞİŞTİRİLDİ: 'link' yerine 'post_redirect'
-    'fc:frame:button:1:target': appUrl, 
+  other: {
+    // Frame sürümünü belirtir
+    'fc:frame': 'vNext',
     
-    // Uygulamanın ana URL'sini post adresi olarak ekliyoruz
-    // Bu, Farcaster'ı bu URL'yi dahili olarak işlemesi için zorlar.
-    'fc:frame:post_url': appUrl, 
+    // Frame'de gösterilecek görselin URL'si
+    'fc:frame:image': `${appUrl}frame_image.png`, 
+    
+    // DİKKAT: Frame butonları, aksiyonları (post/redirect/link) ve post_url alanı 
+    // yerel Miniapp açılışını zorlamak için TAMAMEN KALDIRILMIŞTIR.
+    // Artık sadece gömülü görselin kendisine tıklanması beklenir.
   }
 };
 
