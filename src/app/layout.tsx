@@ -1,5 +1,3 @@
-// app/layout.tsx → KOPYALA-YAPIŞTIR YAP, HİÇ DOKUNMA
-
 import "./globals.css";
 
 export default function RootLayout({
@@ -7,29 +5,28 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Bu satırı en üste koy, JSON'u burada oluşturuyoruz
-  const fcMiniAppContent = JSON.stringify({
+  const miniAppMeta = JSON.stringify({
     version: "1",
-    imageUrl: "https://helloworld-six-omega.vercel.app/frame_image.png",
+    // https:// YOK → sadece domainden başla
+    imageUrl: "helloworld-six-omega.vercel.app/frame_image.png",
     button: {
-      title: "Miniapp'i Aç",
+      title: "Open Miniapp",
       action: {
         type: "launch_miniapp",
         name: "Hello World Miniapp",
-        url: "https://helloworld-six-omega.vercel.app",
+        // burada da https:// yok
+        url: "helloworld-six-omega.vercel.app",
       },
     },
   });
 
   return (
-    <html lang="tr">
+    <html lang="en">
       <head>
-        {/* JSON.stringify ile oluşturduk → JSX hatası yok, Farcaster geçerli kabul ediyor */}
-        <meta name="fc:miniapp" content={fcMiniAppContent} />
+        <meta name="fc:miniapp" content={miniAppMeta} />
 
-        {/* Geriye uyumluluk */}
         <meta name="fc:frame" content="vNext" />
-        <meta name="fc:frame:image" content="https://helloworld-six-omega.vercel.app/frame_image.png" />
+        <meta name="fc:frame:image" content="helloworld-six-omega.vercel.app/frame_image.png" />
         <meta name="fc:frame:image:aspect_ratio" content="1.91:1" />
 
         <meta property="og:image" content="https://helloworld-six-omega.vercel.app/frame_image.png" />
