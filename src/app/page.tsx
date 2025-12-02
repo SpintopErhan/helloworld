@@ -84,16 +84,16 @@ export default function Home() {
             className="w-full py-4 px-6 bg-purple-600 hover:bg-purple-500 active:bg-purple-700 text-white font-bold rounded-xl transition-all transform active:scale-95 text-lg"
             disabled={!isSDKLoaded}
           >
-            📢 "Hello World" Cast At 
+            &quot;Hello World&quot; Cast At
           </button>
 
-          {/* YENİ: Add Miniapp Butonu */}
+          {/* Add Miniapp Butonu */}
           <button
             onClick={handleAddButton}
             className="w-full py-4 px-6 bg-green-600 hover:bg-green-500 active:bg-green-700 text-white font-bold rounded-xl transition-all transform active:scale-95 text-lg"
             disabled={!isSDKLoaded}
           >
-            ⭐ App'i Ekle (Apps Listesine)
+            App&apos;i Ekle (Apps Listesine)
           </button>
         </div>
 
