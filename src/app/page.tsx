@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -18,18 +16,10 @@ export default function Home() {
         setIsSDKLoaded(true);
         await sdk.actions.addMiniApp();
 
-        // Docs'a göre sync erişim – tip hatası yok
         const userData = (sdk.context as any).user;
 
         if (userData?.fid) {
-          setUser({
-            fid: userData.fid,
-            username: userData.username || "anonymous",
-            displayName: userData.displayName || userData.username || "User",
-          });
-        } else {
-          // Fallback – her zaman göster
-          setUser({ fid: 0, username: "test", displayName: "Test User" });
+          setUser(userData);
         }
       } catch (err) {
         console.error("SDK init error:", err);
@@ -42,7 +32,7 @@ export default function Home() {
   const handleCast = useCallback(async () => {
     if (!isSDKLoaded) return;
 
-    const text = user?.fid
+    const text = user?.username
       ? `Hello from @${user.username}! (FID: ${user.fid})`
       : "Hello World from Farcaster Miniapp";
 
@@ -57,22 +47,36 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center bg-slate-900 text-white p-4">
       <div className="w-full max-w-md text-center space-y-8">
 
-        {/* PROFİL – KESİNLİKLE ÇIKACAK */}
+        {/* PROFİL – KOŞULLU RENDER + FALLBACK */}
         <div className="bg-gradient-to-r from-purple-800 to-indigo-800 p-8 rounded-3xl shadow-2xl border-4 border-purple-500">
-          <p className="text-3xl font-bold mb-2">Hoş geldin {user.displayName}!</p>
-          <p className="text-2xl text-purple-200">@{user.username}</p>
-          <p className="text-xl text-purple-300">FID: {user.fid}</p>
+          {user ? (
+            <>
+              <p className="text-3xl font-bold mb-2">Hoş geldin {user.displayName || user.username || "User"}!</p>
+              <p className="text-2xl text-purple-200">@{user.username || "anonymous"}</p>
+              <p className="text-xl text-purple-300">FID: {user.fid}</p>
+            </>
+          ) : (
+            <p className="text-2xl animate-pulse">Profil yükleniyor...</p>
+          )}
         </div>
 
         <h1 className="text-4xl font-bold">Miniapp Demo</h1>
 
-        <button
-          onClick={handleCast}
-          disabled={!isSDKLoaded}
-          className="w-full py-6 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-bold text-2xl rounded-3xl shadow-lg"
-        >
-          Share on Farcaster
-        </button>
+        <div className="bg-slate-800 p-8 rounded-3xl shadow-2xl border border-slate-700">
+          <p className="mb-8 text-slate-300 text-lg">
+            Welcome{user && ` ${user.displayName?.split(" ")[0] || user.username || "there"}!`}
+            <br />
+            Share this Miniapp with your friends
+          </p>
+
+          <button
+            onClick={handleCast}
+            disabled={!isSDKLoaded}
+            className="w-full py-6 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-bold text-2xl rounded-3xl shadow-lg"
+          >
+            {isSDKLoaded ? "Share on Farcaster" : "Loading..."}
+          </button>
+        </div>
       </div>
     </main>
   );
