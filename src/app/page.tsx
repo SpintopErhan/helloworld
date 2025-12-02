@@ -3,6 +3,17 @@
 import { useEffect, useState, useCallback } from "react";
 import { sdk } from "@farcaster/miniapp-sdk";
 
+// Tip tanımı – SDK'nın eksik tipini kendimiz ekliyoruz
+interface MiniAppContext {
+  user?: {
+    fid: number;
+    username?: string;
+    displayName?: string;
+    pfpUrl?: string;
+  };
+  // diğer context alanları (gerekirse ekleyebilirsin)
+}
+
 export default function Home() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const [user, setUser] = useState<{
@@ -20,15 +31,14 @@ export default function Home() {
         setIsSDKLoaded(true);
         await sdk.actions.addMiniApp();
 
-        // KESİN ÇÖZÜM: sdk.context'i "any" ile zorla, sonra tipi doğru ata
-        const context = sdk.context as any;
-        const userData = context?.user;
+        // ANY YOK! Doğru tip ile erişim
+        const contextUser = (sdk.context as MiniAppContext).user;
 
-        if (userData?.fid) {
+        if (contextUser?.fid) {
           setUser({
-            fid: userData.fid,
-            username: userData.username || "anonymous",
-            displayName: userData.displayName || userData.username || "User",
+            fid: contextUser.fid,
+            username: contextUser.username || "anonymous",
+            displayName: contextUser.displayName || contextUser.username || "User",
           });
         }
       } catch (err) {
@@ -60,7 +70,6 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center bg-slate-900 text-white p-4">
       <div className="w-full max-w-md text-center space-y-8">
 
-        {/* Kullanıcı Bilgisi */}
         {user && (
           <div className="bg-slate-800 px-6 py-4 rounded-2xl border border-purple-600">
             <p className="text-lg font-semibold">{user.displayName}</p>
