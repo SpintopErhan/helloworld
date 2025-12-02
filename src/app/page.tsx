@@ -18,8 +18,10 @@ export default function Home() {
         setIsSDKLoaded(true);
         await sdk.actions.addMiniApp();
 
-        // SENİN YAZDIĞIN – KESİN ÇALIŞAN YÖNTEM
-        const context = await sdk.context;
+        // SENİN ÖNERİN – AWAIT + TIP CAST (HATA YOK)
+        const contextPromise = await sdk.context;
+        const context = contextPromise as any;  // Tip cast ile Promise'i obje yap
+
         console.log("Context loaded:", context);
 
         if (context?.user?.fid) {
@@ -27,6 +29,13 @@ export default function Home() {
             fid: context.user.fid,
             username: context.user.username || "anonymous",
             displayName: context.user.displayName || context.user.username || "User",
+          });
+        } else {
+          console.log("User yok – fallback");
+          setUser({
+            fid: 0,
+            username: "anonymous",
+            displayName: "Misafir",
           });
         }
       } catch (err) {
@@ -55,17 +64,11 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center bg-slate-900 text-white p-4">
       <div className="w-full max-w-md text-center space-y-8">
 
-        {/* PROFİL – KESİNLİKLE ÇIKACAK */}
+        {/* PROFİL – HER ZAMAN GÖRÜNÜR */}
         <div className="bg-gradient-to-r from-purple-800 to-indigo-800 p-8 rounded-3xl shadow-2xl border-4 border-purple-500">
-          {user ? (
-            <>
-              <p className="text-3xl font-bold mb-2">Hoş geldin {user.displayName}!</p>
-              <p className="text-2xl text-purple-200">@{user.username}</p>
-              <p className="text-xl text-purple-300">FID: {user.fid}</p>
-            </>
-          ) : (
-            <p className="text-2xl animate-pulse">Profil yükleniyor...</p>
-          )}
+          <p className="text-3xl font-bold mb-2">Hoş geldin {user.displayName}!</p>
+          <p className="text-2xl text-purple-200">@{user.username}</p>
+          <p className="text-xl text-purple-300">FID: {user.fid}</p>
         </div>
 
         <h1 className="text-4xl font-bold">Miniapp Demo</h1>
