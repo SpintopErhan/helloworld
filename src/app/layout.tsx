@@ -1,4 +1,4 @@
-// app/layout.tsx → KOPYALA-YAPIŞTIR YAP, HİÇ DEĞİŞTİRME
+// app/layout.tsx → BU DOSYA İLE KESİN BİTECEK
 
 import "./globals.css";
 
@@ -7,17 +7,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Yoink örneğine %100 birebir uygun JSON
   const miniAppMeta = JSON.stringify({
     version: "1",
-    imageUrl: "helloworld-six-omega.vercel.app/frame_image.png",
+    imageUrl: "https://helloworld-six-omega.vercel.app/frame_image.png",
     button: {
       title: "Open Miniapp",
       action: {
         type: "launch_miniapp",
         name: "Hello World Miniapp",
-        url: "helloworld-six-omega.vercel.app",           // ZORUNLU!
-        splashImageUrl: "helloworld-six-omega.vercel.app/frame_image.png", // EKLENDİ!
-        splashBackgroundColor: "#000000"                  // EKLENDİ! (siyah, mor, beyaz farketmez)
+        url: "https://helloworld-six-omega.vercel.app",                    // ekledik
+        splashImageUrl: "https://helloworld-six-omega.vercel.app/frame_image.png", // ekledik
+        splashBackgroundColor: "#1e1b4b"                                   // koyu mor
       }
     }
   });
@@ -25,12 +26,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* ASIL ÖNEMLİ OLAN BU SATIR */}
         <meta name="fc:miniapp" content={miniAppMeta} />
 
-        {/* Geriye uyumluluk */}
-        <meta name="fc:frame" content="vNext" />
-        <meta name="fc:frame:image" content="helloworld-six-omega.vercel.app/frame_image.png" />
+        {/* Geriye uyumluluk – dokümanda var */}
+        <meta name="fc:frame" content={miniAppMeta.replace('launch_miniapp', 'launch_frame')} />
 
+        {/* OG */}
         <meta property="og:image" content="https://helloworld-six-omega.vercel.app/frame_image.png" />
         <meta property="og:title" content="Hello World Miniapp" />
       </head>
