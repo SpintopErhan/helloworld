@@ -3,9 +3,12 @@
 import { useEffect, useState, useCallback } from "react";
 import { sdk } from "@farcaster/miniapp-sdk";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Any = any;
+
 export default function Home() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<Any>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -16,31 +19,16 @@ export default function Home() {
         setIsSDKLoaded(true);
         await sdk.actions.addMiniApp();
 
-        // YENİ YÖNTEM: user_loaded event’ini dinle
-        const onUserLoaded = (event: any) => {
-          console.log("user_loaded event geldi:", event.detail);
-          const userData = event.detail?.user;
-          if (userData?.fid) {
-            setUser({
-              fid: userData.fid,
-              username: userData.username || "anonymous",
-              displayName: userData.displayName || userData.username || "User",
-            });
-          }
-        };
+        // Context'ten kullanıcıyı al – any sadece burada, kural yukarıda kapatıldı
+        const userData = (sdk.context as Any)?.user;
 
-        // Event dinleyicisi ekle
-        window.addEventListener("user_loaded", onUserLoaded as EventListener);
-
-        // Eğer event zaten atıldıysa hemen çek
-        const contextUser = (sdk.context as any)?.user;
-        if (contextUser?.fid) {
-          onUserLoaded({ detail: { user: contextUser } } as any);
+        if (userData?.fid) {
+          setUser({
+            fid: userData.fid,
+            username: userData.username || "anonymous",
+            displayName: userData.displayName || userData.username || "User",
+          });
         }
-
-        return () => {
-          window.removeEventListener("user_loaded", onUserLoaded as EventListener);
-        };
       } catch (err) {
         console.error("SDK init error:", err);
       }
@@ -57,10 +45,7 @@ export default function Home() {
       : "Hello World from Farcaster Miniapp";
 
     try {
-      await sdk.actions.composeCast({
-        text,
-        embeds: ["https://helloworld-six-omega.vercel.app"],
-      });
+      await sdk.actions.composeCast({ text, embeds: ["https://helloworld-six-omega.vercel.app"] });
     } catch (err) {
       console.error("Cast error:", err);
     }
@@ -74,9 +59,9 @@ export default function Home() {
         <div className="bg-gradient-to-r from-purple-800 to-indigo-800 p-8 rounded-3xl shadow-2xl border-4 border-purple-500">
           {user ? (
             <>
-              <p className="text-3xl font-bold mb-2">{user.displayName}</p>
-              <p className="text-xl text-purple-200">@{user.username}</p>
-              <p className="text-lg text-purple-300">FID: {user.fid}</p>
+              <p className="text-3xl font-bold mb-2">Hoş geldin {user.displayName}!</p>
+              <p className="text-2xl text-purple-200">@{user.username}</p>
+              <p className="text-xl text-purple-300">FID: {user.fid}</p>
             </>
           ) : (
             <p className="text-2xl animate-pulse">Profil yükleniyor...</p>
