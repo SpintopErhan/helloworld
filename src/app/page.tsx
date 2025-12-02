@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-// Hata veren 'import { sdk } from "@farcaster/miniapp-sdk";' satırı kaldırıldı.
+// The problematic 'import { sdk } from "@farcaster/miniapp-sdk";' line was removed.
 
-// Farcaster istemcisi tarafından global olarak eklenen SDK nesnesinin tipini tanımla
-// TypeScript'in 'window' üzerinde FarcasterMiniAppSDK'yı tanımasını sağlarız.
+// Define the type for the SDK object globally added by the Farcaster client
+// Allows TypeScript to recognize FarcasterMiniAppSDK on the 'window' object.
 declare global {
   interface Window {
     FarcasterMiniAppSDK?: {
@@ -19,14 +19,14 @@ declare global {
           username: string;
           displayName: string;
         } | null;
-        // Diğer context alanları...
+        // Other context fields...
       } | null>;
-      // Diğer SDK alanları...
+      // Other SDK fields...
     };
   }
 }
 
-// SDK'ya güvenli erişim için yardımcı fonksiyon
+// Helper function for secure SDK access
 const getSdk = () => {
   if (typeof window !== 'undefined' && window.FarcasterMiniAppSDK) {
     return window.FarcasterMiniAppSDK;
@@ -35,7 +35,7 @@ const getSdk = () => {
 };
 
 
-// Kullanıcı bilgilerini tutmak için basit bir arayüz
+// Simple interface to hold user information
 interface UserInfo {
   fid: number;
   username: string;
@@ -46,28 +46,28 @@ export default function Home() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
-  // SDK'yı başlatır, hazır olduğunu bildirir ve kullanıcı bağlamını (context) alır.
+  // Initializes the SDK, reports readiness, and retrieves the user context.
   useEffect(() => {
     const init = async () => {
       const sdk = getSdk();
       if (!sdk) {
-        console.error("Farcaster MiniApp SDK globalde bulunamadı. Farcaster istemcisinde çalıştırıldığından emin olun.");
-        // SDK bulunamazsa yüklenme durumunda kalır
+        console.error("Farcaster MiniApp SDK not found globally. Ensure it is running within a Farcaster client.");
+        // If SDK is not found, stay in loading state
         return; 
       }
 
       try {
-        // SDK'nın Farcaster istemcisine hazır olduğunu bildir
+        // Report to the Farcaster client that the SDK is ready
         await sdk.actions.ready();
         setIsSDKLoaded(true);
 
-        // Kullanıcının bağlamını al (FID, kullanıcı adı vb.)
+        // Retrieve the user context (FID, username, etc.)
         const context = await sdk.getMiniAppContext();
         
         console.log("MiniApp Context:", context);
 
         if (context?.viewerFarcasterId) {
-          // Kullanıcı bilgileri mevcutsa state'e kaydet
+          // If user information is available, save it to state
           setUserInfo({
             fid: context.viewerFarcasterId.fid,
             username: context.viewerFarcasterId.username,
@@ -75,7 +75,7 @@ export default function Home() {
           });
         }
 
-        // MiniApp'i otomatik olarak ekleme isteği gönder (zaten eklenmediyse)
+        // Automatically request to add MiniApp (if not already added)
         await sdk.actions.addMiniApp();
         console.log("addMiniApp called – prompt shown if not added yet");
 
@@ -87,14 +87,14 @@ export default function Home() {
     init();
   }, []);
 
-  // Yeni Cast oluşturma işlemi
+  // New Cast creation operation
   const handleCast = useCallback(async () => {
     if (!isSDKLoaded) return;
     
     const sdk = getSdk();
-    if (!sdk) return; // SDK yoksa işlemi durdur
+    if (!sdk) return; // Stop operation if SDK is missing
 
-    // Kullanıcının adını cast mesajına ekleyelim
+    // Add the user's name to the cast message
     const userGreeting = userInfo 
       ? `Hello World from Miniapp! 👋 I'm @${userInfo.username} (FID: ${userInfo.fid})`
       : "Hello World from Miniapp";
@@ -102,7 +102,7 @@ export default function Home() {
     try {
       const result = await sdk.actions.composeCast({
         text: userGreeting,
-        embeds: ["https://helloworld-six-omega.vercel.app"], // Kendi uygulamanızın URL'sini kullanın
+        embeds: ["https://helloworld-six-omega.vercel.app"], // Use your own app's URL
       });
 
       if (result?.cast) {
@@ -113,12 +113,12 @@ export default function Home() {
     }
   }, [isSDKLoaded, userInfo]);
 
-  // Kullanıcı bilgisini gösteren yardımcı bir bileşen
+  // Helper component to display user information
   const UserInfoCard = () => {
     if (!userInfo) {
       return (
         <p className="text-lg text-slate-400">
-          Kullanıcı bilgisi alınıyor veya mevcut değil.
+          Fetching user info or not available.
         </p>
       );
     }
@@ -126,11 +126,11 @@ export default function Home() {
     return (
       <div className="text-left space-y-3 pt-4 border-t border-slate-700 mt-6">
         <h2 className="text-2xl font-semibold text-purple-400">
-          Merhaba, {userInfo.displayName}!
+          Welcome, {userInfo.displayName}!
         </h2>
         
         <p className="text-slate-300">
-          <span className="font-medium text-slate-200">Kullanıcı Adı:</span> @{userInfo.username}
+          <span className="font-medium text-slate-200">Username:</span> @{userInfo.username}
         </p>
         <p className="text-slate-300">
           <span className="font-medium text-slate-200">Farcaster ID (FID):</span> {userInfo.fid}
@@ -148,7 +148,7 @@ export default function Home() {
 
         <div className="bg-slate-800 p-8 rounded-3xl shadow-2xl border border-purple-800/50">
           <p className="mb-8 text-slate-300 text-lg">
-            Uygulamayı çalıştıran Farcaster kullanıcısının bilgilerini başarıyla aldık.
+            Successfully retrieved the information of the Farcaster user running the app.
           </p>
 
           <UserInfoCard />
@@ -158,13 +158,13 @@ export default function Home() {
             disabled={!isSDKLoaded}
             className="w-full mt-8 py-4 px-8 bg-purple-600 hover:bg-purple-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold text-xl rounded-2xl transition-all transform hover:scale-105 active:scale-95 shadow-xl shadow-purple-900/50"
           >
-            {isSDKLoaded ? "Cast Oluştur ve Paylaş" : "Yükleniyor..."}
+            {isSDKLoaded ? "Compose and Share Cast" : "Loading..."}
           </button>
         </div>
 
         {!isSDKLoaded && (
           <p className="text-sm text-slate-500 animate-pulse">
-            Farcaster'a bağlanılıyor...
+            Connecting to Farcaster...
           </p>
         )}
       </div>
