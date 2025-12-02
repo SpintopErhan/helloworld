@@ -33,22 +33,26 @@ const handleCastButton = useCallback(async () => {
   if (!isSDKLoaded) return;
 
   try {
-    // Manuel compose URL – text + embed URL
-    const castText = "Hello World! Farcaster Miniapp’i dene!";
-    const encodedCastText = encodeURIComponent(castText);
-    
-    const embedUrl = "https://helloworld-six-omega.vercel.app/";  // Senin domain'in
-    const encodedEmbedUrl = encodeURIComponent(embedUrl);
-    
-    const finalComposeUrl = `https://farcaster.xyz/~/compose?text=${encodedCastText}&embeds[]=${encodedEmbedUrl}`;
-    
-    // SDK ile pencereyi aç
-    await sdk.actions.openUrl(finalComposeUrl);
-    
-  //  alert("Cast hazırlandı! Embed ile birlikte atıldı 🎉");
+    // composeCast ile native pencere aç – text + embed dolu
+    const result = await sdk.actions.composeCast({
+      text: "Hello World! Farcaster Miniapp'i dene 🚀",  // Cast metni
+      embeds: ["https://helloworld-six-omega.vercel.app"],  // Embed URL'in (max 2)
+      // parent: { type: 'cast', hash: 'some-hash' },  // İstersen reply için ekle
+      // channelKey: "farcaster",  // Opsiyonel kanal
+      // close: true,  // Cast sonrası app'i kapat (isteğe bağlı)
+    });
+
+    // Sonuç kontrolü – kullanıcı cast attı mı?
+    if (result?.cast) {
+      console.log("Cast atıldı! Hash:", result.cast.hash);
+      console.log("Kanal:", result.cast.channelKey);
+      // İstersen burada bildirim veya log ekle
+    } else {
+      console.log("Cast iptal edildi.");
+    }
   } catch (err) {
-    console.error("Cast hatası:", err);
-    alert("Cast açılamadı.");
+    console.error("ComposeCast hatası:", err);
+    // Hata durumunda sessiz kal veya toast göster
   }
 }, [isSDKLoaded]);
 
