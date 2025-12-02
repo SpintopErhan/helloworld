@@ -30,9 +30,11 @@ export default function Home() {
         embeds: ["https://helloworld-six-omega.vercel.app"],
       });
 
-      result?.cast
-        ? console.log("Cast sent! Hash:", result.cast.hash)
-        : console.log("Cast cancelled");
+     if (result?.cast) {
+  console.log("Cast sent! Hash:", result.cast.hash);
+} else {
+  console.log("Cast cancelled");
+}
     } catch (err) {
       console.error("composeCast error:", err);
     }
