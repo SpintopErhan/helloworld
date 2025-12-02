@@ -2,13 +2,17 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { sdk } from "@farcaster/miniapp-sdk";
+import Image from "next/image";
 
-type UserData = {
+// Tip tanımı – TS mutlu olsun
+interface MiniAppUser {
   fid: number;
   username?: string;
   displayName?: string;
   pfpUrl?: string;
-};
+}
+
+type UserData = MiniAppUser;
 
 export default function Home() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
@@ -22,21 +26,17 @@ export default function Home() {
         await sdk.actions.ready();
         setIsSDKLoaded(true);
 
-        // Otomatik app ekleme
         await sdk.actions.addMiniApp();
 
-        // Kullanıcı bilgilerini direkt context'ten al (docs'a göre sync erişim)
-        const userData = (sdk.context as any).user;  // TS hatası yok – docs'a uyumlu
-        if (userData) {
+        // Tip hatası yok – doğru tip ataması
+        const contextUser = (sdk.context as { user?: MiniAppUser }).user;
+        if (contextUser) {
           setUser({
-            fid: userData.fid,
-            username: userData.username,
-            displayName: userData.displayName || userData.username || "Anonymous",
-            pfpUrl: userData.pfpUrl,
+            fid: contextUser.fid,
+            username: contextUser.username,
+            displayName: contextUser.displayName || contextUser.username || "Anonymous",
+            pfpUrl: contextUser.pfpUrl,
           });
-          console.log("User loaded from context:", userData);
-        } else {
-          console.warn("User data not available in context");
         }
       } catch (err) {
         console.error("SDK init error:", err);
@@ -67,10 +67,12 @@ export default function Home() {
         {user && (
           <div className="flex items-center gap-4 mb-8 bg-slate-800 p-4 rounded-2xl">
             {user.pfpUrl ? (
-              <img
+              <Image
                 src={user.pfpUrl}
-                alt={user.displayName}
-                className="w-16 h-16 rounded-full border-4 border-purple-600"
+                alt={user.displayName || "User"}
+                width={64}
+                height={64}
+                className="w-16 h-16 rounded-full border-4 border-purple-600 object-cover"
               />
             ) : (
               <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center">
@@ -86,7 +88,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Ana İçerik */}
         <div className="bg-slate-800 p-8 rounded-3xl shadow-2xl border border-slate-700 text-center">
           <h1 className="text-4xl font-bold mb-6">Miniapp Demo</h1>
           <p className="text-slate-300 mb-8 text-lg">
